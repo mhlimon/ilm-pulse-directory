@@ -1,0 +1,23 @@
+body {
+    font-family: 'Noto Sans Bengali', system-ui, sans-serif;
+}
+
+.hero {
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://source.unsplash.com/1600x900/?islam,mosque') center/cover no-repeat;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+}
+
+.card {
+    transition: all 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.bg-success {
+    background-color: #198754 !important;
+}

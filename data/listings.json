@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "title": "আস-সুন্নাহ ফাউন্ডেশন",
+    "category": "চ্যারিটি ও যাকাত",
+    "description": "দাওয়াহ, শিক্ষা ও সেবামূলক কাজ করে।",
+    "link": "https://assunnahfoundation.org",
+    "location": "ঢাকা"
+  },
+  {
+    "id": 2,
+    "title": "ইসলামিক ফাউন্ডেশন বাংলাদেশ",
+    "category": "সরকারি",
+    "description": "কুরআন, হাদিস ও ইসলামী গবেষণা।",
+    "link": "https://islamicfoundation.gov.bd",
+    "location": "ঢাকা"
+  }
+]
