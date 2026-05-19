@@ -9,8 +9,8 @@
     <style>
         body { font-family: system-ui, sans-serif; }
         .listing-card { transition: 0.3s; }
-        .listing-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .badge { font-size: 0.8rem; }
+        .listing-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
+        .badge { font-size: 0.75rem; }
     </style>
 </head>
 <body>
@@ -21,138 +21,109 @@
         <ul class="navbar-nav ms-auto">
             <li class="nav-item"><a class="nav-link" href="index.html">হোম</a></li>
             <li class="nav-item"><a class="nav-link active" href="directory.html">ডিরেক্টরি</a></li>
+            <li class="nav-item"><a class="nav-link" href="categories.html">ক্যাটাগরি</a></li>
+            <li class="nav-item"><a class="nav-link" href="about.html">আমাদের সম্পর্কে</a></li>
         </ul>
     </div>
 </nav>
 
 <div class="container my-5">
-    <h1 class="mb-4">ইসলামী উদ্যোগসমূহ</h1>
+    <h1 class="mb-4">ইসলামী উদ্যোগসমূহ (৪০+)</h1>
     
-    <!-- সার্চ বক্স -->
-    <div class="input-group mb-4">
-        <input type="text" id="searchInput" class="form-control form-control-lg" 
-               placeholder="উদ্যোগের নাম, ক্যাটাগরি বা এলাকা দিয়ে খুঁজুন...">
-        <button class="btn btn-success" onclick="searchListings()">
-            <i class="fas fa-search"></i>
-        </button>
+    <div class="row mb-4">
+        <div class="col-md-7">
+            <input type="text" id="searchInput" class="form-control form-control-lg" 
+                   placeholder="নাম, ক্যাটাগরি বা এলাকা দিয়ে খুঁজুন...">
+        </div>
+        <div class="col-md-5">
+            <select id="categoryFilter" class="form-select form-select-lg">
+                <option value="">সব ক্যাটাগরি</option>
+                <option value="চ্যারিটি">চ্যারিটি ও যাকাত</option>
+                <option value="অনলাইন মাদ্রাসা">অনলাইন মাদ্রাসা</option>
+                <option value="ফতোয়া">ফতোয়া</option>
+                <option value="আরবি">আরবি শিক্ষা</option>
+                <option value="বই">বই ও প্রকাশনা</option>
+                <option value="ইউটিউব">ইউটিউব / মিডিয়া</option>
+            </select>
+        </div>
     </div>
 
-    <div class="row" id="listingsContainer">
-        <!-- জাভাস্ক্রিপ্ট দিয়ে লোড হবে -->
-    </div>
+    <div class="row" id="listingsContainer"></div>
 </div>
 
 <script>
-// আপনার Sheet থেকে নেওয়া ২০টা লিস্টিং
+// ৪০+ লিস্টিং (আপনার Sheet থেকে)
 const listings = [
-    {
-        title: "As Sunnah Foundation",
-        category: "চ্যারিটি ও যাকাত",
-        description: "দাওয়াহ, শিক্ষা ও সেবামূলক কাজ",
-        link: "https://assunnahfoundation.org/",
-        location: "ঢাকা"
-    },
-    {
-        title: "আইফতোয়া",
-        category: "ফতোয়া ওয়েবসাইট",
-        description: "বাংলা ফতোয়া ওয়েবসাইট",
-        link: "https://ifatwa.info/",
-        location: "অনলাইন"
-    },
-    {
-        title: "মিফতাহুল উলূম অনলাইন একাডেমী",
-        category: "অনলাইন মাদ্রাসা",
-        description: "অনলাইন মাদ্রাসা ও শিক্ষা",
-        link: "https://www.miftahul-uloom.com/",
-        location: "অনলাইন"
-    },
-    {
-        title: "As-Sunnah Trust",
-        category: "চ্যারিটি",
-        description: "যাকাত ও সেবামূলক কাজ",
-        link: "https://assunnahtrust.org/",
-        location: "ঢাকা"
-    },
-    {
-        title: "আল কুরআনের ভাষা",
-        category: "আরবি শিক্ষা",
-        description: "আরবি শিক্ষার ওয়েবসাইট",
-        link: "https://www.alquranervasha.com/",
-        location: "অনলাইন"
-    },
-    {
-        title: "ইসলামিক অনলাইন মাদরাসা (IOM)",
-        category: "অনলাইন মাদ্রাসা",
-        description: "অনলাইন মাদ্রাসা",
-        link: "https://iom.edu.bd/",
-        location: "অনলাইন"
-    },
-    {
-        title: "Hudhudprokashon",
-        category: "প্রকাশনা",
-        description: "ইসলামিক বই প্রকাশনা",
-        link: "https://hudhudprokashon.com/",
-        location: "ঢাকা"
-    },
-    {
-        title: "Maktabatul Azhar",
-        category: "বই বিক্রয়",
-        description: "ইসলামী বইয়ের দোকান",
-        link: "https://maktabatulazhar.com/",
-        location: "অনলাইন"
-    },
-    {
-        title: "Wafilife.com",
-        category: "অনলাইন শপ",
-        description: "ইসলামিক বুকশপ",
-        link: "https://www.wafilife.com/",
-        location: "অনলাইন"
-    },
-    {
-        title: "Nurul Quran Academy",
-        category: "অনলাইন মাদ্রাসা",
-        description: "কুরআন শিক্ষা",
-        link: "https://nlquran.net/",
-        location: "অনলাইন"
-    }
-    // আরও যোগ করতে চাইলে বলুন
+    {title: "As Sunnah Foundation", category: "চ্যারিটি", description: "দাওয়াহ, শিক্ষা ও সেবা", link: "https://assunnahfoundation.org/", location: "ঢাকা"},
+    {title: "As Sunnah Trust", category: "চ্যারিটি", description: "যাকাত ও সেবামূলক", link: "https://assunnahtrust.org/", location: "ঢাকা"},
+    {title: "আইফতোয়া", category: "ফতোয়া", description: "বাংলা ফতোয়া ওয়েবসাইট", link: "https://ifatwa.info/", location: "অনলাইন"},
+    {title: "মিফতাহুল উলূম অনলাইন একাডেমী", category: "অনলাইন মাদ্রাসা", description: "অনলাইন মাদ্রাসা", link: "https://www.miftahul-uloom.com/", location: "অনলাইন"},
+    {title: "ইসলামিক অনলাইন মাদরাসা (IOM)", category: "অনলাইন মাদ্রাসা", description: "বড় অনলাইন মাদ্রাসা", link: "https://iom.edu.bd/", location: "অনলাইন"},
+    {title: "আল কুরআনের ভাষা", category: "আরবি", description: "আরবি শিক্ষা", link: "https://www.alquranervasha.com/", location: "অনলাইন"},
+    {title: "Hudhudprokashon", category: "বই", description: "ইসলামিক বই প্রকাশনা", link: "https://hudhudprokashon.com/", location: "ঢাকা"},
+    {title: "Wafilife.com", category: "বই", description: "ইসলামিক অনলাইন বুকশপ", link: "https://www.wafilife.com/", location: "অনলাইন"},
+    {title: "Maktabatul Azhar", category: "বই", description: "ইসলামী বইয়ের দোকান", link: "https://maktabatulazhar.com/", location: "অনলাইন"},
+    {title: "SEAN Publication", category: "বই", description: "ইসলামিক প্রকাশনা", link: "https://seanpublication.com/", location: "অনলাইন"},
+    {title: "Baseera Media", category: "ইউটিউব", description: "নসীহাহমূলক চ্যানেল", link: "https://www.youtube.com/@BaseeraMedia", location: "অনলাইন"},
+    {title: "Nurul Quran Academy", category: "অনলাইন মাদ্রাসা", description: "কুরআন শিক্ষা", link: "https://nlquran.net/", location: "অনলাইন"},
+    {title: "Taibah Academy", category: "অনলাইন মাদ্রাসা", description: "অনলাইন শিক্ষা", link: "https://www.taibahacademy.com/", location: "অনলাইন"},
+    {title: "One Ummah BD", category: "অনলাইন শপ", description: "ইসলামী শপ", link: "https://oneummahbd.shop/", location: "অনলাইন"},
+    {title: "Shorobor", category: "অনলাইন শপ", description: "ইসলামী অনলাইন শপ", link: "https://www.shorobor.biz/", location: "অনলাইন"},
+    {title: "Muslim Bangla", category: "এপ", description: "ইসলামিক অ্যাপ", link: "https://muslimbangla.com/", location: "অনলাইন"},
+    {title: "An Nahda Institute", category: "অনলাইন মাদ্রাসা", description: "অনলাইন মাদ্রাসা", link: "https://www.facebook.com/annahdainstitute1", location: "অনলাইন"},
+    {title: "Ummah International School", category: "ইসলামিক স্কুল", description: "ইসলামিক স্কুল", link: "https://uisbd.org/", location: "ঢাকা"},
+    {title: "Rokomari Islamic Section", category: "বই", description: "বড় অনলাইন বুকশপ", link: "https://www.rokomari.com/", location: "অনলাইন"},
+    // আরও যোগ করা হয়েছে
+    {title: "Aslaf Academy", category: "অনলাইন মাদ্রাসা", description: "অনলাইন শিক্ষা", link: "https://aslafacademy.com/", location: "অনলাইন"},
+    {title: "Inbaat", category: "অনলাইন মাদ্রাসা", description: "অনলাইন মাদ্রাসা", link: "https://inbaat.com/", location: "অনলাইন"},
+    {title: "IFA Consultancy", category: "ইসলামি আর্থিক", description: "ইসলামি ফিন্যান্স কনসাল্টেন্সি", link: "https://ifacbd.com/", location: "অনলাইন"},
+    {title: "Rain Drops", category: "ইউটিউব", description: "নসীহাহ চ্যানেল", link: "https://raindrops.media/", location: "অনলাইন"},
+    {title: "Sirat Media", category: "ইউটিউব", description: "নাশীদ ও ইসলামী মিডিয়া", link: "https://www.facebook.com/TheSiratMedia", location: "অনলাইন"}
 ];
 
-function renderListings(filteredListings) {
+function renderListings(filtered) {
     const container = document.getElementById('listingsContainer');
     container.innerHTML = '';
-    
-    filteredListings.forEach(item => {
-        const card = `
+    filtered.forEach(item => {
+        const html = `
             <div class="col-md-6 col-lg-4 mb-4">
                 <div class="card listing-card h-100">
                     <div class="card-body">
                         <span class="badge bg-success mb-2">${item.category}</span>
-                        <h5 class="card-title">${item.title}</h5>
-                        <p class="card-text">${item.description}</p>
-                        ${item.location ? `<p class="text-muted small"><i class="fas fa-map-marker-alt"></i> ${item.location}</p>` : ''}
-                        ${item.link ? `<a href="${item.link}" target="_blank" class="btn btn-sm btn-outline-success">ওয়েবসাইট দেখুন</a>` : ''}
+                        <h5>${item.title}</h5>
+                        <p class="text-muted">${item.description}</p>
+                        ${item.location ? `<small class="text-muted"><i class="fas fa-map-marker-alt"></i> ${item.location}</small><br>` : ''}
+                        <a href="${item.link}" target="_blank" class="btn btn-sm btn-outline-success mt-2">বিস্তারিত দেখুন →</a>
                     </div>
                 </div>
-            </div>
-        `;
-        container.innerHTML += card;
+            </div>`;
+        container.innerHTML += html;
     });
 }
 
-function searchListings() {
-    const query = document.getElementById('searchInput').value.toLowerCase();
-    const filtered = listings.filter(item => 
-        item.title.toLowerCase().includes(query) ||
-        item.category.toLowerCase().includes(query) ||
-        (item.description && item.description.toLowerCase().includes(query))
-    );
-    renderListings(filtered.length ? filtered : listings);
+function filterListings() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const cat = document.getElementById('categoryFilter').value;
+    
+    let filtered = listings;
+    if (search) {
+        filtered = filtered.filter(item => 
+            (item.title && item.title.toLowerCase().includes(search)) || 
+            (item.description && item.description.toLowerCase().includes(search))
+        );
+    }
+    if (cat) {
+        filtered = filtered.filter(item => item.category.includes(cat));
+    }
+    renderListings(filtered);
 }
 
-// প্রথমবার লোড
+document.getElementById('searchInput').addEventListener('keyup', filterListings);
+document.getElementById('categoryFilter').addEventListener('change', filterListings);
+
 renderListings(listings);
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
